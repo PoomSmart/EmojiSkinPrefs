@@ -1,0 +1,11 @@
+
+{
+    entry = {
+	bundle = emojiskinSet;
+	cell = PSLinkCell;
+	detail = main;
+	icon = EmojiSkinPrefsIcon.png;
+	isController = 1;
+	label = EmojiSkinPrefs;
+    };
+}
