@@ -5,19 +5,13 @@
 #import "../EmojiLibrary/Emoji10.h"
 #import "../EmojiLibrary/Functions.x"
 
-//ios 10.x -(id)skinToneBaseKeyPreferences
-@interface UIKeyboardEmojiKeyDisplayController : NSObject
-@end
-
-//Disable Options
 static BOOL SkinPopNull = NO;
 static BOOL TapSkinNull = NO;
 
-// SET CASE #
 int SkinNumber = 0;
 static NSArray *skins = @[@"🏻", @"🏼", @"🏽", @"🏾", @"🏿"];
 
-static void loadPrefs(){
+static void loadPrefs() {
     NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.vxbakerxv.emojiskinprefs.plist"];
     if (prefs) {
         SkinPopNull = [[prefs objectForKey:@"SkinPopBool"] boolValue];
@@ -53,12 +47,12 @@ static NSMutableDictionary *fullSkinTone() {
 
 %end
 
-
 %hook UIKeyboardEmoji
 
 - (id)initWithString: (NSString *)string withVariantMask: (NSInteger)variantMask {
     return %orig(string, SkinPopNull ? 0 : variantMask);
 }
+
 %end
 
 
