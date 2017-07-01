@@ -1,9 +1,9 @@
 Package: com.vxbakerxv.emojiskinprefs
 Name: EmojiSkinPrefs
-Depends: mobilesubstrate
+Depends: mobilesubstrate, preferenceloader, ws.hbang.common (>= 1.2)
 Version: 0.0.1
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
+Description: Defaults emoji skin tone
 Maintainer: vXBaKeRXv
 Author: vXBaKeRXv
 Section: Tweaks

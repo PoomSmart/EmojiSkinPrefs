@@ -38,7 +38,7 @@ static NSMutableDictionary *fullSkinTone_cache = nil;
 static NSMutableDictionary *fullSkinTone() {
     if (fullSkinTone_cache == nil) {
         fullSkinTone_cache = [[NSMutableDictionary dictionary] retain];
-        NSString *skin = skins[SkinNumber];
+        NSString *skin = skins[SkinNumber - 1];
         for (NSString *base in SkinToneEmoji)
             fullSkinTone_cache[base] = skinnedEmoji(base, skin);
     }
@@ -65,7 +65,7 @@ static NSMutableDictionary *fullSkinTone() {
 %hook UIKeyboardEmojiPreferences
 
 - (NSDictionary *)skinToneBaseKeyPreferences {
-    return fullSkinTone();
+    return SkinNumber != 0 ? fullSkinTone() : %orig;
 }
 
 %end

@@ -12,26 +12,6 @@
 	<key>items</key>
 	<array>
 		<dict>
-			<key>alignment</key>
-			<integer>1</integer>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string></string> 
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string></string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string></string>
-		</dict>
-		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
@@ -41,7 +21,7 @@
 			<key>cell</key>
 			<string>PSLinkListCell</string>
 			<key>default</key>
-			<integer>1</integer>
+			<integer>0</integer>
 			<key>defaults</key>
 			<string>com.vxbakerxv.emojiskinprefs</string>
 			<key>detail</key>
@@ -61,20 +41,18 @@
 			</array>
 			<key>validValues</key>
 			<array>
+				<integer>0</integer>
 				<integer>1</integer>
 				<integer>2</integer>
 				<integer>3</integer>
 				<integer>4</integer>
 				<integer>5</integer>
-				<integer>6</integer>
 			</array>
-		</dict>	
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-			<key>label</key>
-			<string></string>
-		</dict>		
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
@@ -88,13 +66,11 @@
 			<string>com.vxbakerxv.emojiskinprefs</string>
 			<key>PostNotification</key>
 			<string>com.vxbakerxv.emojiskinSet/settingschanged</string>
-		</dict>	
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-			<key>label</key>
-			<string></string>
-		</dict>		
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
@@ -108,22 +84,28 @@
 			<string>com.vxbakerxv.emojiskinprefs</string>
 			<key>PostNotification</key>
 			<string>com.vxbakerxv.emojiskinSet/settingschanged</string>
-		</dict>			
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string></string>
+			<string>Developers</string>
 		</dict>
 		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
+    	<key>cellClass</key>
+	    <string>HBTwitterCell</string>
+	    <key>label</key>
+	    <string>@vXBaKeRXv (Developer)</string>
+	    <key>user</key>
+	    <string>vxbakerxv</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBTwitterCell</string>
 			<key>label</key>
-			<string>@vXBaKeRXv (Developer)</string>
-			<key>action</key>
-			<string>vxbakerxvTwitter:</string>
-			<key>icon</key>
-			<string>Twitter.png</string>
+			<string>@PoomSmart (Developer)</string>
+			<key>user</key>
+			<string>PoomSmart</string>
 		</dict>
 	</array>
 	<key>title</key>

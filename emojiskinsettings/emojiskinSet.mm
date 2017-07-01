@@ -1,8 +1,7 @@
-#define KILL_PROCESS
-#import "../../PS.h"
-#import <Preferences/PSListController.h>
+#import <Cephei/HBListController.h>
+#import <Cephei/HBRespringController.h>
 
-@interface emojiskinSetListController : PSListController
+@interface emojiskinSetListController : HBListController
 @end
 
 @implementation emojiskinSetListController
@@ -14,85 +13,65 @@
     return _specifiers;
 }
 
-- (void)refresh {
-}
-
-static void RestartSpringBoard() {
-    killProcess("SpringBoard");
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    //[self clearCache];
-    [self reload];
-    [super viewWillAppear:animated];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     UIBarButtonItem *rightButton = [[[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonPressed)] autorelease];
-    [self.navigationItem setRightBarButtonItem:rightButton];
-
-    [self HeaderCell];
+    self.navigationItem.rightBarButtonItem = rightButton;
 }
 
 - (void)rightButtonPressed {
     [self.view endEditing:YES];
-    RestartSpringBoard();
-
+    [HBRespringController respring];
 }
 
-- (void)HeaderCell {
+- (void)loadView {
+    [super loadView];
     @autoreleasepool {
-        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 60)];
+        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 200)];
         UIImage *bkIm = [[UIImage alloc] initWithContentsOfFile:[[NSBundle bundleWithPath:@"/Library/PreferenceBundles/emojiskinSet.bundle"] pathForResource:@"Header" ofType:@"png"]];
         UIImageView *_background = [[UIImageView alloc] initWithImage:bkIm];
-        _background.frame = CGRectMake((0 / 2) - (bkIm.size.width / 2), (60 / 2) - (bkIm.size.height / 2), bkIm.size.width, bkIm.size.height);
-        [_background setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
+        _background.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         [headerView addSubview:_background];
+        [bkIm release];
+        [_background release];
 
-
-        int width = [[UIScreen mainScreen] bounds].size.width;
-
-        CGRect frame = CGRectMake(0, 10, width, 60);
-        CGRect subFrame = CGRectMake(0, 70, width, 40);
+        CGRect frame = CGRectMake(0, 60, headerView.frame.size.width, 60);
+        CGRect subFrame = CGRectMake(0, 120, headerView.frame.size.width, 40);
 
         UILabel *heading = [[UILabel alloc] initWithFrame:frame];
-        [heading setNumberOfLines:1];
+        heading.numberOfLines = 1;
         heading.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:40];
-        [heading setText:@"EmojiSkinPrefs"];
-        [heading setBackgroundColor:[UIColor clearColor]];
-        heading.textColor = [UIColor yellowColor];
+        heading.text = @"EmojiSkinPrefs";
+        heading.backgroundColor = UIColor.clearColor;
+        heading.textColor = UIColor.yellowColor;
         heading.textAlignment = NSTextAlignmentCenter;
 
         UILabel *subtitle = [[UILabel alloc] initWithFrame:subFrame];
-        [subtitle setNumberOfLines:1];
+        subtitle.numberOfLines = 1;
+        subtitle.backgroundColor = UIColor.clearColor;
         subtitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
-        [subtitle setText:@"By vXBaKeRXv"];
+        subtitle.text = @"By vXBaKeRXv and PoomSmart";
 
-        subtitle.textColor = [UIColor brownColor];
+        subtitle.textColor = UIColor.blackColor;
         subtitle.textAlignment = NSTextAlignmentCenter;
 
-        [heading.layer setShadowColor:[UIColor clearColor].CGColor];
-        [heading.layer setShadowOpacity:1.0];
-        [heading.layer setShadowRadius:1.5];
-        [heading.layer setShadowOffset:CGSizeMake(0.0, 2.0)];
+        heading.layer.shadowColor = UIColor.clearColor.CGColor;
+        heading.layer.shadowOpacity = 1.0;
+        heading.layer.shadowRadius = 1.5;
+        heading.layer.shadowOffset = CGSizeMake(0.0, 2.0);
 
-        [subtitle.layer setShadowColor:[UIColor clearColor].CGColor];
-        [subtitle.layer setShadowOpacity:1.0];
-        [subtitle.layer setShadowRadius:1.5];
-        [subtitle.layer setShadowOffset:CGSizeMake(0.0, 2.0)];
+        subtitle.layer.shadowColor = UIColor.clearColor.CGColor;
+        subtitle.layer.shadowOpacity = 1.0;
+        subtitle.layer.shadowRadius = 1.5;
+        subtitle.layer.shadowOffset = CGSizeMake(0.0, 2.0);
 
-        [self.table addSubview:heading];
-        [self.table addSubview:subtitle];
-        [self.table setTableHeaderView:headerView];
-        [self.table sendSubviewToBack:headerView];
-
-
+        [headerView addSubview:heading];
+        [heading release];
+        [headerView addSubview:subtitle];
+        [subtitle release];
+        self.table.tableHeaderView = headerView;
+        [headerView release];
     }
-}
-
-- (void)vxbakerxvTwitter:(id)sender {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/vxbakerxv"]];
 }
 
 @end
