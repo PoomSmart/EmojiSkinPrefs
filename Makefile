@@ -14,21 +14,20 @@ include $(THEOS)/makefiles/common.mk
 TWEAK_NAME = EmojiSkinPrefs
 EmojiSkinPrefs_FILES = Tweak.xm
 EmojiSkinPrefs_USE_SUBSTRATE = 1
-EmojiSkinPrefs_FRAMEWORKS = UIKit Foundation
-EmojiSkinPrefs_PRIVATE_FRAMEWORKS = SpringBoardUI
 
 include $(THEOS_MAKE_PATH)/tweak.mk
+
+ifneq ($(SIMULATOR),1)
 SUBPROJECTS += emojiskinsettings
 include $(THEOS_MAKE_PATH)/aggregate.mk
-
-internal-stage::
-
 
 after-install::
 	install.exec "killall -9 SpringBoard"
 
-all::
+endif
+
 ifeq ($(SIMULATOR),1)
+all::
 	@rm -f /opt/simject/$(TWEAK_NAME).dylib
 	@cp -v $(THEOS_OBJ_DIR)/$(TWEAK_NAME).dylib /opt/simject
 	@cp -v $(PWD)/$(TWEAK_NAME).plist /opt/simject

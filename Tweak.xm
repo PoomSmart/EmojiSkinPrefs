@@ -8,8 +8,7 @@
 static BOOL SkinPopNull = NO;
 static BOOL TapSkinNull = NO;
 
-int SkinNumber = 0;
-static NSArray *skins = @[@"🏻", @"🏼", @"🏽", @"🏾", @"🏿"];
+int SkinNumber = 1;
 
 static void loadPrefs() {
     NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.vxbakerxv.emojiskinprefs.plist"];
@@ -21,20 +20,20 @@ static void loadPrefs() {
     [prefs release];
 }
 
-static NSString *skinnedEmoji(NSString *emoji, NSString *skin) {
-    NSString *skinned = [NSString stringWithFormat:@"%@%@", emojiBaseString(emoji), skin];
-    NSString *base = emojiBaseFirstCharacterString(skinned);
-    NSString *trueSkinned = base.length == 1 ? skinned : [NSString stringWithFormat:@"%@%@%@", base, skin, [skinned substringWithRange:NSMakeRange(base.length, skinned.length - 4)]];
-    return trueSkinned;
-}
-
 static NSMutableDictionary *fullSkinTone_cache = nil;
 static NSMutableDictionary *fullSkinTone() {
     if (fullSkinTone_cache == nil) {
         fullSkinTone_cache = [[NSMutableDictionary dictionary] retain];
-        NSString *skin = skins[SkinNumber - 1];
+        NSString *skin = skinModifiers[SkinNumber - 1];
+        // Overlapping might occur
         for (NSString *base in SkinToneEmoji)
-            fullSkinTone_cache[base] = skinnedEmoji(base, skin);
+            fullSkinTone_cache[base] = skinToneVariant(base, nil, nil, skin);
+        for (NSString *base in GenderEmoji)
+            fullSkinTone_cache[base] = skinToneVariant(base, nil, nil, skin);
+        for (NSString *base in ProfessionEmoji)
+            fullSkinTone_cache[base] = skinToneVariant(base, nil, nil, skin);
+        for (NSString *base in @[@"✊", @"✋", @"✌", @"✍", @"🏌"])
+            fullSkinTone_cache[base] = skinToneVariant(base, nil, nil, skin);
     }
     return fullSkinTone_cache;
 }
@@ -55,7 +54,6 @@ static NSMutableDictionary *fullSkinTone() {
 
 %end
 
-
 %hook UIKeyboardEmojiPreferences
 
 - (NSDictionary *)skinToneBaseKeyPreferences {
@@ -67,8 +65,5 @@ static NSMutableDictionary *fullSkinTone() {
 %ctor {
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.vxbakerxv.emojiskinSet/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
     loadPrefs();
-    dlopen("/Library/MobileSubstrate/DynamicLibraries/Emoji10WT.dylib", RTLD_LAZY);
-    dlopen("/Library/MobileSubstrate/DynamicLibraries/Emoji10PS.dylib", RTLD_LAZY);
-    dlopen("/Library/MobileSubstrate/DynamicLibraries/Emoji10Fix.dylib", RTLD_LAZY);
     %init;
 }
