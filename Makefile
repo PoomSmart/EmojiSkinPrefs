@@ -1,10 +1,11 @@
 DEBUG = 0
+PACKAGE_VERSION = 0.0.2
 
 ifeq ($(SIMULATOR),1)
 	TARGET = simulator:clang:latest
 	ARCHS = x86_64 i386
 else
-	TARGET = iphone:clang:latest:9.0
+	TARGET = iphone:clang:9.0:9.0
 endif
 
 THEOS_BUILD_DIR = Packages

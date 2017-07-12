@@ -3,6 +3,7 @@
 #import <dlfcn.h>
 #define EMOJI_SKIN_PREFS
 #import "../EmojiLibrary/Emoji10.h"
+#import "../EmojiLibrary/Header.h"
 #import "../EmojiLibrary/Functions.x"
 
 static BOOL SkinPopNull = NO;
@@ -25,15 +26,28 @@ static NSMutableDictionary *fullSkinTone() {
     if (fullSkinTone_cache == nil) {
         fullSkinTone_cache = [[NSMutableDictionary dictionary] retain];
         NSString *skin = skinModifiers[SkinNumber - 1];
-        // Overlapping might occur
-        for (NSString *base in SkinToneEmoji)
-            fullSkinTone_cache[base] = skinToneVariant(base, nil, nil, skin);
-        for (NSString *base in GenderEmoji)
-            fullSkinTone_cache[base] = skinToneVariant(base, nil, nil, skin);
-        for (NSString *base in ProfessionEmoji)
-            fullSkinTone_cache[base] = skinToneVariant(base, nil, nil, skin);
-        for (NSString *base in @[@"✊", @"✋", @"✌", @"✍", @"🏌"])
-            fullSkinTone_cache[base] = skinToneVariant(base, nil, nil, skin);
+        for (UIKeyboardEmoji *emoji in ((UIKeyboardEmojiCategory *)[NSClassFromString(@"UIKeyboardEmojiCategory") categoryForType:0]).emoji) {
+            NSString *emojiString = emoji.emojiString;
+            if (hasVariantsForEmoji(emojiString) >= 2) {
+                NSString *_emojiBaseString = emojiBaseString(emojiString);
+                fullSkinTone_cache[_emojiBaseString] = skinToneVariant(_emojiBaseString, nil, nil, skin);
+            }
+        }
+        for (UIKeyboardEmoji *emoji in ((UIKeyboardEmojiCategory *)[NSClassFromString(@"UIKeyboardEmojiCategory") categoryForType:1]).emoji) {
+            NSString *emojiString = emoji.emojiString;
+            if (hasVariantsForEmoji(emojiString) >= 2) {
+                NSString *_emojiBaseString = emojiBaseString(emojiString);
+                fullSkinTone_cache[_emojiBaseString] = skinToneVariant(_emojiBaseString, nil, nil, skin);
+            }
+
+        }
+        for (UIKeyboardEmoji *emoji in ((UIKeyboardEmojiCategory *)[NSClassFromString(@"UIKeyboardEmojiCategory") categoryForType:4]).emoji) {
+            NSString *emojiString = emoji.emojiString;
+            if (hasVariantsForEmoji(emojiString) >= 2) {
+                NSString *_emojiBaseString = emojiBaseString(emojiString);
+                fullSkinTone_cache[_emojiBaseString] = skinToneVariant(_emojiBaseString, nil, nil, skin);
+            }
+        }
     }
     return fullSkinTone_cache;
 }
