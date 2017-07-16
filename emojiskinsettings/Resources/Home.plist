@@ -61,7 +61,7 @@
 			<key>default</key>
 			<false/>
 			<key>key</key>
-			<string>TapSkinBool</string>
+			<string>UpdateToneOff</string>
 			<key>defaults</key>
 			<string>com.vxbakerxv.emojiskinprefs</string>
 			<key>PostNotification</key>
@@ -79,7 +79,7 @@
 			<key>default</key>
 			<false/>
 			<key>key</key>
-			<string>SkinPopBool</string>
+			<string>SkinKeyOff</string>
 			<key>defaults</key>
 			<string>com.vxbakerxv.emojiskinprefs</string>
 			<key>PostNotification</key>

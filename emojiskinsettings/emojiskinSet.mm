@@ -1,10 +1,24 @@
+#import "../Header.h"
+#import "../../PSPrefs.x"
+
+#if TARGET_OS_SIMULATOR
+#import <Preferences/PSListController.h>
+
+@interface emojiskinSetListController : PSListController
+@end
+
+#else
 #import <Cephei/HBListController.h>
 #import <Cephei/HBRespringController.h>
 
 @interface emojiskinSetListController : HBListController
 @end
 
+#endif
+
 @implementation emojiskinSetListController
+
+HavePrefs()
 
 - (id)specifiers {
     if (_specifiers == nil) {
@@ -21,7 +35,9 @@
 
 - (void)rightButtonPressed {
     [self.view endEditing:YES];
+    #if !TARGET_OS_SIMULATOR
     [HBRespringController respring];
+    #endif
 }
 
 - (void)loadView {

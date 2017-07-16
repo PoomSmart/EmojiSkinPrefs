@@ -1,61 +1,45 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <dlfcn.h>
-#define EMOJI_SKIN_PREFS
-#import "../EmojiLibrary/Emoji10.h"
+#import "../PSHeader/Misc.h"
 #import "../EmojiLibrary/Header.h"
-#import "../EmojiLibrary/Functions.x"
+#import "../EmojiLibrary/PSEmojiUtilities.h"
+#import "Header.h"
+#import <dlfcn.h>
 
-static BOOL SkinPopNull = NO;
-static BOOL TapSkinNull = NO;
+BOOL SkinKeyOff = NO;
+BOOL UpdateToneOff = NO;
 
-int SkinNumber = 1;
+int SkinNumber = 0;
 
 static void loadPrefs() {
-    NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.vxbakerxv.emojiskinprefs.plist"];
+    NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:realPrefPath(tweakIdentifier)];
     if (prefs) {
-        SkinPopNull = [[prefs objectForKey:@"SkinPopBool"] boolValue];
-        TapSkinNull = [[prefs objectForKey:@"TapSkinBool"] boolValue];
+        SkinKeyOff = [[prefs objectForKey:@"SkinKeyOff"] boolValue];
+        UpdateToneOff = [[prefs objectForKey:@"UpdateToneOff"] boolValue];
         SkinNumber = [[prefs objectForKey:@"SkinNum"] intValue];
     }
     [prefs release];
 }
 
-static NSMutableDictionary *fullSkinTone_cache = nil;
-static NSMutableDictionary *fullSkinTone() {
-    if (fullSkinTone_cache == nil) {
-        fullSkinTone_cache = [[NSMutableDictionary dictionary] retain];
-        NSString *skin = skinModifiers[SkinNumber - 1];
-        for (UIKeyboardEmoji *emoji in ((UIKeyboardEmojiCategory *)[NSClassFromString(@"UIKeyboardEmojiCategory") categoryForType:0]).emoji) {
-            NSString *emojiString = emoji.emojiString;
-            if (hasVariantsForEmoji(emojiString) >= 2) {
-                NSString *_emojiBaseString = emojiBaseString(emojiString);
-                fullSkinTone_cache[_emojiBaseString] = skinToneVariant(_emojiBaseString, nil, nil, skin);
-            }
-        }
-        for (UIKeyboardEmoji *emoji in ((UIKeyboardEmojiCategory *)[NSClassFromString(@"UIKeyboardEmojiCategory") categoryForType:1]).emoji) {
-            NSString *emojiString = emoji.emojiString;
-            if (hasVariantsForEmoji(emojiString) >= 2) {
-                NSString *_emojiBaseString = emojiBaseString(emojiString);
-                fullSkinTone_cache[_emojiBaseString] = skinToneVariant(_emojiBaseString, nil, nil, skin);
-            }
+%hook UIKeyboardEmojiInputController
 
-        }
-        for (UIKeyboardEmoji *emoji in ((UIKeyboardEmojiCategory *)[NSClassFromString(@"UIKeyboardEmojiCategory") categoryForType:4]).emoji) {
-            NSString *emojiString = emoji.emojiString;
-            if (hasVariantsForEmoji(emojiString) >= 2) {
-                NSString *_emojiBaseString = emojiBaseString(emojiString);
-                fullSkinTone_cache[_emojiBaseString] = skinToneVariant(_emojiBaseString, nil, nil, skin);
-            }
-        }
-    }
-    return fullSkinTone_cache;
+- (void)updateSkinToneBaseKey: (NSString *)base variantUsed: (NSString *)variant {
+    if (UpdateToneOff)
+        return;
+    %orig;
 }
+
+%end
 
 %hook UIKeyboardEmojiCollectionInputView
 
-- (id)tappedSkinToneEmoji {
-    return TapSkinNull ? nil : %orig;
+- (UIKeyboardEmojiCollectionViewCell *)collectionView: (UICollectionView *)collectionView cellForItemAtIndexPath: (NSIndexPath *)indexPath {
+    UIKeyboardEmojiCollectionViewCell *cell = %orig;
+    if (cell.emoji.variantMask >= 2 && SkinNumber) {
+        cell.emoji.emojiString = [PSEmojiUtilities changeEmojiSkin:cell.emoji.emojiString toSkin:[PSEmojiUtilities skinModifiers][SkinNumber]];
+        cell.emoji = cell.emoji;
+    }
+    return cell;
 }
 
 %end
@@ -63,15 +47,7 @@ static NSMutableDictionary *fullSkinTone() {
 %hook UIKeyboardEmoji
 
 - (id)initWithString: (NSString *)string withVariantMask: (NSInteger)variantMask {
-    return %orig(string, SkinPopNull ? 0 : variantMask);
-}
-
-%end
-
-%hook UIKeyboardEmojiPreferences
-
-- (NSDictionary *)skinToneBaseKeyPreferences {
-    return SkinNumber != 0 ? fullSkinTone() : %orig;
+    return %orig(string, SkinKeyOff ? 0 : variantMask);
 }
 
 %end
