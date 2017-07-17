@@ -35,9 +35,7 @@ HavePrefs()
 
 - (void)rightButtonPressed {
     [self.view endEditing:YES];
-    #if !TARGET_OS_SIMULATOR
-    [HBRespringController respring];
-    #endif
+    //[HBRespringController respring];
 }
 
 - (void)loadView {

@@ -1,4 +1,4 @@
-PACKAGE_VERSION = 0.0.3
+PACKAGE_VERSION = 0.0.4
 ifeq ($(SIMULATOR),1)
 export SYSROOT = /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
 endif
