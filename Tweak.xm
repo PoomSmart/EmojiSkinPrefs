@@ -36,7 +36,7 @@ static void loadPrefs() {
 - (UIKeyboardEmojiCollectionViewCell *)collectionView: (UICollectionView *)collectionView cellForItemAtIndexPath: (NSIndexPath *)indexPath {
     UIKeyboardEmojiCollectionViewCell *cell = %orig;
     if (cell.emoji.variantMask >= 2 && SkinNumber) {
-        cell.emoji.emojiString = [PSEmojiUtilities changeEmojiSkin:cell.emoji.emojiString toSkin:[PSEmojiUtilities skinModifiers][SkinNumber]];
+        cell.emoji.emojiString = [PSEmojiUtilities changeEmojiSkin:cell.emoji.emojiString toSkin:[PSEmojiUtilities skinModifiers][SkinNumber - 1]];
         cell.emoji = cell.emoji;
     }
     return cell;
