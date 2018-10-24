@@ -1,16 +1,11 @@
-PACKAGE_VERSION = 0.0.5
-ifeq ($(SIMULATOR),1)
-export SYSROOT = /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
-endif
+PACKAGE_VERSION = 0.0.6a
 
 ifeq ($(SIMULATOR),1)
 	TARGET = simulator:clang:latest:8.3
 	ARCHS = x86_64 i386
 else
-	TARGET = iphone:clang:9.0:8.3
+	TARGET = iphone:clang:latest:8.3
 endif
-
-THEOS_BUILD_DIR = Packages
 
 include $(THEOS)/makefiles/common.mk
 
@@ -23,9 +18,6 @@ include $(THEOS_MAKE_PATH)/tweak.mk
 
 SUBPROJECTS += emojiskinsettings
 include $(THEOS_MAKE_PATH)/aggregate.mk
-
-after-install::
-	install.exec "killall -9 SpringBoard"
 
 ifeq ($(SIMULATOR),1)
 include ../preferenceloader/locatesim.mk

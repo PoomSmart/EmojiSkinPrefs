@@ -6,6 +6,8 @@
 #import "Header.h"
 #import <dlfcn.h>
 
+static NSMutableDictionary <NSString *, NSString *> *skinCache = nil;
+
 BOOL SkinKeyOff = NO;
 BOOL UpdateToneOff = NO;
 
@@ -21,9 +23,9 @@ static void loadPrefs() {
     [prefs release];
 }
 
-%hook UIKeyboardEmojiInputController
+%hook UIKeyboardEmojiInputController // iOS < 11
 
-- (void)updateSkinToneBaseKey: (NSString *)base variantUsed: (NSString *)variant {
+- (void)updateSkinToneBaseKey:(NSString *)base variantUsed:(NSString *)variant {
     if (UpdateToneOff)
         return;
     %orig;
@@ -33,10 +35,24 @@ static void loadPrefs() {
 
 %hook UIKeyboardEmojiCollectionInputView
 
-- (UIKeyboardEmojiCollectionViewCell *)collectionView: (UICollectionView *)collectionView cellForItemAtIndexPath: (NSIndexPath *)indexPath {
+- (BOOL)skinToneWasUsedForEmoji:(NSString *)emoji {
+    return SkinNumber ? YES : %orig;
+}
+
+// Shouldn't go well with NoMoreSkinToneSuggestion
+- (UIKeyboardEmojiCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UIKeyboardEmojiCollectionViewCell *cell = %orig;
-    if (cell.emoji.variantMask >= 2 && SkinNumber) {
-        cell.emoji.emojiString = [PSEmojiUtilities changeEmojiSkin:cell.emoji.emojiString toSkin:[PSEmojiUtilities skinModifiers][SkinNumber - 1]];
+    if ((cell.emoji.variantMask & PSEmojiTypeSkin) && SkinNumber) {
+        NSString *emojiString = cell.emoji.emojiString;
+        if (skinCache[emojiString] == nil) {
+            NSString *skin = [PSEmojiUtilities skinModifiers][SkinNumber - 1];
+            if ([PSEmojiUtilities hasSkin:emojiString])
+                cell.emoji.emojiString = [PSEmojiUtilities changeEmojiSkin:emojiString toSkin:skin];
+            else
+                cell.emoji.emojiString = [PSEmojiUtilities skinToneVariant:emojiString skin:skin];
+            skinCache[emojiString] = cell.emoji.emojiString;
+        } else
+            cell.emoji.emojiString = skinCache[emojiString];
         cell.emoji = cell.emoji;
     }
     return cell;
@@ -44,16 +60,23 @@ static void loadPrefs() {
 
 %end
 
-%hook UIKeyboardEmoji
+// Don't see the point of hooking this
+/*%hook UIKeyboardEmoji
 
-- (id)initWithString: (NSString *)string withVariantMask: (NSInteger)variantMask {
-    return %orig(string, SkinKeyOff ? 0 : variantMask);
+- (id)initWithString:(NSString *)string withVariantMask:(NSInteger)variantMask {
+    return %orig(string, SkinKeyOff ? (variantMask & ~2) : variantMask);
 }
 
-%end
+%end*/
 
 %ctor {
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.vxbakerxv.emojiskinSet/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
     loadPrefs();
+    skinCache = [[NSMutableDictionary dictionary] retain];
     %init;
+}
+
+%dtor {
+    if (skinCache)
+        [skinCache release];
 }

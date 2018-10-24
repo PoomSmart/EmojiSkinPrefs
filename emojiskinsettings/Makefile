@@ -2,7 +2,7 @@ ifeq ($(SIMULATOR),1)
 	TARGET = simulator:clang:latest:8.3
 	ARCHS = x86_64 i386
 else
-	TARGET = iphone:clang:9.0:8.3
+	TARGET = iphone:clang:11.2:8.3
 endif
 
 include $(THEOS)/makefiles/common.mk
@@ -10,11 +10,8 @@ include $(THEOS)/makefiles/common.mk
 BUNDLE_NAME = emojiskinSet
 emojiskinSet_FILES = emojiskinSet.mm
 emojiskinSet_INSTALL_PATH = /Library/PreferenceBundles
-emojiskinSet_FRAMEWORKS = UIKit Foundation
+emojiskinSet_FRAMEWORKS = UIKit
 emojiskinSet_PRIVATE_FRAMEWORKS = Preferences
-ifneq ($(SIMULATOR),1)
-emojiskinSet_EXTRA_FRAMEWORKS = CepheiPrefs
-endif
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 
