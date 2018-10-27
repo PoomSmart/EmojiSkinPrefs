@@ -8,30 +8,14 @@
 
 static NSMutableDictionary <NSString *, NSString *> *skinCache = nil;
 
-BOOL SkinKeyOff = NO;
-BOOL UpdateToneOff = NO;
-
 int SkinNumber = 0;
 
 static void loadPrefs() {
     NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:realPrefPath(tweakIdentifier)];
-    if (prefs) {
-        SkinKeyOff = [[prefs objectForKey:@"SkinKeyOff"] boolValue];
-        UpdateToneOff = [[prefs objectForKey:@"UpdateToneOff"] boolValue];
+    if (prefs)
         SkinNumber = [[prefs objectForKey:@"SkinNum"] intValue];
-    }
     [prefs release];
 }
-
-%hook UIKeyboardEmojiInputController // iOS < 11
-
-- (void)updateSkinToneBaseKey:(NSString *)base variantUsed:(NSString *)variant {
-    if (UpdateToneOff)
-        return;
-    %orig;
-}
-
-%end
 
 %hook UIKeyboardEmojiCollectionInputView
 
@@ -59,15 +43,6 @@ static void loadPrefs() {
 }
 
 %end
-
-// Don't see the point of hooking this
-/*%hook UIKeyboardEmoji
-
-- (id)initWithString:(NSString *)string withVariantMask:(NSInteger)variantMask {
-    return %orig(string, SkinKeyOff ? (variantMask & ~2) : variantMask);
-}
-
-%end*/
 
 %ctor {
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.vxbakerxv.emojiskinSet/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);

@@ -52,52 +52,16 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>label</key>
-			<string>Update Tone Off</string>
-			<key>default</key>
-			<false/>
-			<key>key</key>
-			<string>UpdateToneOff</string>
-			<key>defaults</key>
-			<string>com.vxbakerxv.emojiskinprefs</string>
-			<key>PostNotification</key>
-			<string>com.vxbakerxv.emojiskinSet/settingschanged</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>label</key>
-			<string>Skin Key Off</string>
-			<key>default</key>
-			<false/>
-			<key>key</key>
-			<string>SkinKeyOff</string>
-			<key>defaults</key>
-			<string>com.vxbakerxv.emojiskinprefs</string>
-			<key>PostNotification</key>
-			<string>com.vxbakerxv.emojiskinSet/settingschanged</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Developers</string>
 		</dict>
 		<dict>
-    	<key>cellClass</key>
-	    <string>HBTwitterCell</string>
-	    <key>label</key>
-	    <string>@vXBaKeRXv (Developer)</string>
-	    <key>user</key>
-	    <string>vxbakerxv</string>
+			<key>cellClass</key>
+			<string>HBTwitterCell</string>
+			<key>label</key>
+			<string>@vXBaKeRXv (Developer)</string>
+			<key>user</key>
+			<string>vxbakerxv</string>
 		</dict>
 		<dict>
 			<key>cellClass</key>

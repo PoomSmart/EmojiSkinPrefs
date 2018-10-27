@@ -1,6 +1,5 @@
 #import "../Header.h"
 #import "../../PSPrefs.x"
-
 #import <Preferences/PSListController.h>
 
 @interface emojiskinSetListController : PSListController
@@ -15,16 +14,6 @@ HavePrefs()
         _specifiers = [[self loadSpecifiersFromPlistName:@"Home" target:self] retain];
     }
     return _specifiers;
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    UIBarButtonItem *rightButton = [[[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonPressed)] autorelease];
-    self.navigationItem.rightBarButtonItem = rightButton;
-}
-
-- (void)rightButtonPressed {
-    [self.view endEditing:YES];
 }
 
 - (void)loadView {
