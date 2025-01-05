@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>entry</key>
+    <dict>
+        <key>cell</key>
+        <string>PSLinkCell</string>
+        <key>label</key>
+        <string>EmojiSkinSettings</string>
+    </dict>
+    <key>items</key>
+    <array>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Static Skin Tone</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSLinkListCell</string>
+            <key>default</key>
+            <integer>0</integer>
+            <key>defaults</key>
+            <string>com.vxbakerxv.emojiskinprefs</string>
+            <key>detail</key>
+            <string>PSListItemsController</string>
+            <key>key</key>
+            <string>SkinNum</string>
+            <key>label</key>
+            <string>Selected: </string>
+            <key>validTitles</key>
+            <array>
+                <string>Default</string>
+                <string>🏻</string>
+                <string>🏼</string>
+                <string>🏽</string>
+                <string>🏾</string>
+                <string>🏿</string>
+            </array>
+            <key>validValues</key>
+            <array>
+                <integer>0</integer>
+                <integer>1</integer>
+                <integer>2</integer>
+                <integer>3</integer>
+                <integer>4</integer>
+                <integer>5</integer>
+            </array>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Developers</string>
+        </dict>
+        <dict>
+            <key>cellClass</key>
+            <string>HBTwitterCell</string>
+            <key>label</key>
+            <string>@PoomSmart (Developer)</string>
+            <key>user</key>
+            <string>PoomSmart</string>
+        </dict>
+        <dict>
+            <key>cellClass</key>
+            <string>HBTwitterCell</string>
+            <key>label</key>
+            <string>@vXBaKeRXv (Developer)</string>
+            <key>user</key>
+            <string>vxbakerxv</string>
+        </dict>
+    </array>
+    <key>title</key>
+    <string>HOME</string>
+</dict>
+</plist>
