@@ -23,12 +23,11 @@ $(TWEAK_NAME)_USE_SUBSTRATE = 1
 include $(THEOS_MAKE_PATH)/tweak.mk
 
 ifeq ($(SIMULATOR),1)
-include ../preferenceloader/locatesim.mk
+include ../../Simulator/preferenceloader-sim/locatesim.mk
 setup:: clean all
     @rm -f /opt/simject/$(TWEAK_NAME).dylib
     @cp -v $(THEOS_OBJ_DIR)/$(TWEAK_NAME).dylib /opt/simject
     @cp -v $(PWD)/$(TWEAK_NAME).plist /opt/simject
-    @sudo cp -v $(PWD)/emojiskinsettings/entry.plist $(PL_SIMULATOR_PLISTS_PATH)/emojiskinSet.plist
-    @sudo cp -vR $(THEOS_OBJ_DIR)/emojiskinSet.bundle $(PL_SIMULATOR_BUNDLES_PATH)/
+    @sudo cp -vR $(PWD)/layout/Library/PreferenceLoader/Preferences/EmojiSkinPrefs $(PL_SIMULATOR_PLISTS_PATH)/
 else
 endif
