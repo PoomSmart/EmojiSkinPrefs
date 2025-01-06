@@ -13,6 +13,7 @@ int SkinNumber = 0;
 static void loadPrefs() {
     id value = [[NSUserDefaults standardUserDefaults] objectForKey:@"SkinNum" inDomain:@"com.apple.UIKit"];
     SkinNumber = value ? [value intValue] : 0;
+    [skinCache removeAllObjects];
 }
 
 %hook UIKeyboardEmojiCollectionInputView
@@ -29,14 +30,10 @@ static void loadPrefs() {
     NSString *emojiString = cell.emoji.emojiString;
     if (!(cell.emoji.variantMask & PSEmojiTypeSkin) && ![PSEmojiUtilities hasSkinToneVariants:emojiString]) return cell;
     if (skinCache[emojiString] == nil) {
-        NSString *skin = [PSEmojiUtilities skinModifiers][SkinNumber - 1];
-        if ([PSEmojiUtilities hasSkin:emojiString])
-            cell.emoji.emojiString = [PSEmojiUtilities changeEmojiSkin:emojiString toSkin:skin];
-        else {
-            NSArray <NSString *> *skinVariants = [PSEmojiUtilities skinToneVariantsForString:emojiString withSelf:NO];
-            cell.emoji.emojiString = skinVariants[SkinNumber - 1];
-        }
-        skinCache[emojiString] = cell.emoji.emojiString;
+        NSString *baseString = [PSEmojiUtilities emojiBaseString:emojiString];
+        BOOL isMultiSkin = [PSEmojiUtilities isCoupleMultiSkinToneEmoji:baseString];
+        NSArray <NSString *> *skinVariants = [PSEmojiUtilities skinToneVariantsForString:emojiString withSelf:NO];
+        skinCache[emojiString] = cell.emoji.emojiString = skinVariants[(SkinNumber - 1) * (isMultiSkin ? 6 : 1)];
     } else
         cell.emoji.emojiString = skinCache[emojiString];
     cell.emoji = cell.emoji;
