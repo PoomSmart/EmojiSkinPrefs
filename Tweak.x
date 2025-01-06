@@ -1,19 +1,18 @@
 #define CHECK_TARGET
+#import <Foundation/NSUserDefaults+Private.h>
 #import <PSHeader/Misc.h>
 #import <PSHeader/PS.h>
 #import <EmojiLibrary/Header.h>
 #import <EmojiLibrary/PSEmojiUtilities.h>
 #import <dlfcn.h>
-#import "Header.h"
 
 static NSMutableDictionary <NSString *, NSString *> *skinCache = nil;
 
 int SkinNumber = 0;
 
 static void loadPrefs() {
-    NSDictionary *prefs = [[NSDictionary alloc] initWithContentsOfFile:realPrefPath(tweakIdentifier)];
-    if (prefs)
-        SkinNumber = [[prefs objectForKey:@"SkinNum"] intValue];
+    id value = [[NSUserDefaults standardUserDefaults] objectForKey:@"SkinNum" inDomain:@"com.apple.UIKit"];
+    SkinNumber = value ? [value intValue] : 0;
 }
 
 %hook UIKeyboardEmojiCollectionInputView
@@ -26,9 +25,9 @@ static void loadPrefs() {
 - (UIKeyboardEmojiCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UIKeyboardEmojiCollectionViewCell *cell = %orig;
     if (!SkinNumber) return cell;
+    if (![cell isKindOfClass:NSClassFromString(@"UIKeyboardEmojiCollectionViewCell")]) return cell;
     NSString *emojiString = cell.emoji.emojiString;
-    BOOL supportSkin = [cell isKindOfClass:NSClassFromString(@"UIKeyboardEmojiCollectionViewCell")] && ((cell.emoji.variantMask & PSEmojiTypeSkin) || [PSEmojiUtilities hasSkinToneVariants:emojiString]);
-    if (!supportSkin) return cell;
+    if (!(cell.emoji.variantMask & PSEmojiTypeSkin) && ![PSEmojiUtilities hasSkinToneVariants:emojiString]) return cell;
     if (skinCache[emojiString] == nil) {
         NSString *skin = [PSEmojiUtilities skinModifiers][SkinNumber - 1];
         if ([PSEmojiUtilities hasSkin:emojiString])
@@ -48,7 +47,7 @@ static void loadPrefs() {
 
 %ctor {
     if (isTarget(TargetTypeApps | TargetTypeGenericExtensions)) {
-        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.vxbakerxv.emojiskinSet/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.apple.UIKit/esp.settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
         loadPrefs();
         skinCache = [NSMutableDictionary dictionary];
         %init;

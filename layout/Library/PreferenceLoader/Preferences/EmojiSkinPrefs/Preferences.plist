@@ -2,20 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>entry</key>
-    <dict>
+    <key>title</key>
+    <string>EmojiSkinPrefs</string>
+	<key>entry</key>
+	<dict>
         <key>cell</key>
         <string>PSLinkCell</string>
+        <key>icon</key>
+        <string>EmojiSkinPrefs.png</string>
         <key>label</key>
-        <string>EmojiSkinSettings</string>
+        <string>EmojiSkinPrefs</string>
     </dict>
     <key>items</key>
     <array>
         <dict>
             <key>cell</key>
             <string>PSGroupCell</string>
-            <key>label</key>
-            <string>Static Skin Tone</string>
+            <key>footerAlignment</key>
+            <integer>1</integer>
+            <key>footerText</key>
+            <string>© 2025 PoomSmart</string>
         </dict>
         <dict>
             <key>cell</key>
@@ -23,21 +29,21 @@
             <key>default</key>
             <integer>0</integer>
             <key>defaults</key>
-            <string>com.vxbakerxv.emojiskinprefs</string>
+            <string>com.apple.UIKit</string>
             <key>detail</key>
             <string>PSListItemsController</string>
             <key>key</key>
             <string>SkinNum</string>
             <key>label</key>
-            <string>Selected: </string>
+            <string>Selected Skin Tone</string>
             <key>validTitles</key>
             <array>
                 <string>Default</string>
-                <string>🏻</string>
-                <string>🏼</string>
-                <string>🏽</string>
-                <string>🏾</string>
-                <string>🏿</string>
+                <string>🏻 (Light)</string>
+                <string>🏼 (Medium-Light)</string>
+                <string>🏽 (Medium)</string>
+                <string>🏾 (Medium-Dark)</string>
+                <string>🏿 (Dark)</string>
             </array>
             <key>validValues</key>
             <array>
@@ -48,31 +54,11 @@
                 <integer>4</integer>
                 <integer>5</integer>
             </array>
-        </dict>
-        <dict>
-            <key>cell</key>
-            <string>PSGroupCell</string>
-            <key>label</key>
-            <string>Developers</string>
-        </dict>
-        <dict>
-            <key>cellClass</key>
-            <string>HBTwitterCell</string>
-            <key>label</key>
-            <string>@PoomSmart (Developer)</string>
-            <key>user</key>
-            <string>PoomSmart</string>
-        </dict>
-        <dict>
-            <key>cellClass</key>
-            <string>HBTwitterCell</string>
-            <key>label</key>
-            <string>@vXBaKeRXv (Developer)</string>
-            <key>user</key>
-            <string>vxbakerxv</string>
+            <key>PostNotification</key>
+            <string>com.apple.UIKit/esp.settingschanged</string>
+            <key>staticTextMessage</key>
+            <string>Emojis with support for skin tones will default to the selected skin tone above. On the emoji keyboard, you can tap to use the emoji with that skin tone right away. You can still tap and hold the emoji to choose your own skin tone.</string>
         </dict>
     </array>
-    <key>title</key>
-    <string>HOME</string>
 </dict>
 </plist>
