@@ -1,6 +1,6 @@
 Package: com.vxbakerxv.emojiskinprefs
 Name: EmojiSkinPrefs
-Depends: mobilesubstrate, preferenceloader, ws.hbang.common (>= 1.2), firmware (>= 8.3), com.ps.emojilibrary (>= 1.6.0)
+Depends: mobilesubstrate, preferenceloader, firmware (>= 8.3), com.ps.emojilibrary (>= 1.6.0)
 Version: 1.0.0
 Architecture: iphoneos-arm
 Description: Defaults emoji skin tone.
